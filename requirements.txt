@@ -1,0 +1,14 @@
+# Framework web para construir APIs
+fastapi==0.111.0
+
+# Servidor ASGI para ejecutar FastAPI
+uvicorn[standard]==0.23.2
+
+# ORM que combina Pydantic + SQLAlchemy
+sqlmodel==0.0.8
+
+# Driver para conectar con PostgreSQL
+psycopg2-binary==2.9.7
+
+# Leer variables de entorno desde .env
+python-dotenv==1.0.0

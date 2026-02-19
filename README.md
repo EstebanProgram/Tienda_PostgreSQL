@@ -1,166 +1,54 @@
-# Tienda_PostgreSQL
+# Tienda API - FastAPI + SQLModel + PostgreSQL
 
-API REST para gestionar proveedores, tiendas, productos y stock, construida con **FastAPI**, **SQLModel** y **PostgreSQL**.
+Este proyecto es una API de ejemplo para gestionar proveedores, tiendas y productos usando FastAPI y SQLModel, con PostgreSQL como base de datos. Permite crear, leer, actualizar y eliminar registros, además de gestionar stock y buscar por nombre.
 
----
+## Requisitos
 
-## Tabla de Contenidos
-
-* [Tecnologías](#tecnologías)
-* [Estructura del proyecto](#estructura-del-proyecto)
-* [Instalación](#instalación)
-* [Configuración](#configuración)
-* [Ejecutar el proyecto](#ejecutar-el-proyecto)
-* [Endpoints disponibles](#endpoints-disponibles)
-* [Notas y recomendaciones](#notas-y-recomendaciones)
-
----
-
-## 🛠 Tecnologías
-
-* Python 3.11+
-* FastAPI
-* SQLModel (ORM sobre SQLAlchemy)
-* PostgreSQL
-* Pydantic (validación de datos)
-* Uvicorn (servidor ASGI)
-
----
-
-## Estructura del proyecto
-
-```
-tienda_app/
-│
-├── app/
-│   ├── main.py                 # Entry point de FastAPI con todos los endpoints
-│   ├── config.py               # Configuración de entorno (.env)
-│   ├── models/                 # Modelos y schemas
-│   │   ├── __init__.py
-│   │   ├── base.py             # Clases base para herencia
-│   │   ├── tables.py           # Tablas ORM: Proveedor, Tienda, Producto, TiendaProducto
-│   │   └── schemas.py          # Schemas Pydantic para requests/responses
-│   ├── db/                     # Conexión y setup de base de datos
-│   │   ├── __init__.py
-│   │   ├── session.py          # Engine y Session
-│   │   └── init_db.py          # Crear tablas
-│   ├── routers/                # Endpoints separados por recurso
-│   │   ├── __init__.py
-│   │   ├── proveedores.py
-│   │   ├── tiendas.py
-│   │   └── productos.py
-│   └── utils/
-│       └── helpers.py
-│
-├── .env                        # Variables de entorno (no subir a GitHub)
-├── requirements.txt
-└── README.md
-```
-
----
+- Python >= 3.11
+- PostgreSQL
+- pip
 
 ## Instalación
 
-Clonar el repositorio:
+Clona el repositorio y entra en el directorio del proyecto. Crea y activa un entorno virtual. Instala las dependencias desde `requirements.txt`. Crea un archivo `.env` en la raíz del proyecto con las siguientes variables:
 
-```bash
-git clone <URL_DEL_REPOSITORIO>
-cd tienda_app
-```
-
-Crear y activar el entorno virtual:
-
-```bash
-python -m venv venv
-# Windows
-venv\Scripts\activate
-# macOS/Linux
-source venv/bin/activate
-```
-
-Instalar dependencias:
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## ⚙️ Configuración
-
-Crea un archivo `.env` en la raíz con las siguientes variables:
-
-```
-POSTGRES_USER=tu_usuario
+POSTGRES_USER=postgres
 POSTGRES_PASSWORD=tu_password
+POSTGRES_DB=tienda_db
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
-POSTGRES_DB=tienda_db
 DEBUG=True
-```
 
-Importante cambia `tu_usuario` y `tu_password` según tu configuración de PostgreSQL.
 
----
+Cambia `tu_password` por la contraseña que hayas configurado en PostgreSQL. `DEBUG=True` activa recarga automática y logs para desarrollo.
 
-## Ejecutar el proyecto
+## Configuración de la base de datos
 
-1. Inicia la base de datos PostgreSQL.
-2. Ejecuta la app con Uvicorn:
+Asegúrate de que PostgreSQL está corriendo. Crea la base de datos si no existe: `CREATE DATABASE tienda_db;`. Crea el usuario y asigna contraseña si es necesario: `CREATE USER postgres WITH PASSWORD 'tu_password'; GRANT ALL PRIVILEGES ON DATABASE tienda_db TO postgres;`. Esto solo es necesario si el usuario/postgres no existía previamente.
 
-```bash
-uvicorn app.main:app --reload
-```
+## Ejecución de la API
 
-3. Accede a la documentación automática de FastAPI:
+Arranca el servidor en desarrollo con `uvicorn app.main:app --reload`. Esto levantará la API en `http://127.0.0.1:8000`. La documentación automática de FastAPI estará disponible en Swagger UI (`/docs`) y ReDoc (`/redoc`).
 
-[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+## Endpoints principales
 
----
-
-## Endpoints disponibles
-
-### Proveedores
-
-* `POST /proveedores/` – Crear proveedor
-* `GET /proveedores/` – Listar proveedores
-* `GET /proveedores/{id}` – Obtener proveedor por ID
-* `GET /proveedores/nombre/` – Buscar por nombre
-* `PATCH /proveedores/{id}` – Actualizar proveedor
-* `DELETE /proveedores/{id}` – Eliminar proveedor
-
-### Tiendas
-
-* `POST /tiendas/` – Crear tienda
-* `GET /tiendas/` – Listar tiendas
-* `GET /tiendas/{id}` – Obtener tienda por ID
-* `GET /tiendas/nombre/` – Buscar por nombre
-* `PATCH /tiendas/{id}` – Actualizar tienda
-* `DELETE /tiendas/{id}` – Eliminar tienda
-
-### Productos
-
-* `POST /productos/` – Crear producto
-* `GET /productos/` – Listar productos
-* `GET /productos/{id}` – Obtener producto por ID
-* `GET /productos/nombre/` – Buscar por nombre
-* `PATCH /productos/{id}` – Actualizar producto
-* `DELETE /productos/{id}` – Eliminar producto
-
-### Stock Tienda-Producto
-
-* `POST /tiendas/{tienda_id}/productos/{producto_id}` – Añadir producto a tienda
-* `GET /tiendas/{tienda_id}/productos` – Listar productos de una tienda
-* `PATCH /tiendas/{tienda_id}/productos/{producto_id}` – Actualizar stock
-* `DELETE /tiendas/{tienda_id}/productos/{producto_id}` – Eliminar producto de tienda
-
----
+- `/proveedores/` → CRUD de proveedores  
+- `/tiendas/` → CRUD de tiendas  
+- `/productos/` → CRUD de productos  
+- `/tiendas/{tienda_id}/productos/` → Gestionar stock de productos por tienda  
+- `/tiendas/nombre/?nombre=<nombre>` → Buscar tiendas por nombre (LIKE)  
+- `/productos/nombre/?nombre=<nombre>` → Buscar productos por nombre (LIKE)  
+- `/proveedores/nombre/?nombre=<nombre>` → Buscar proveedores por nombre (LIKE)  
 
 ## Notas y recomendaciones
 
-* Todos los modelos usan **ORM (SQLModel)** para relaciones y consultas limpias.
-* Se recomienda usar **PostgreSQL** para aprovechar índices, relaciones y consultas avanzadas.
-* Los endpoints de búsqueda usan `ilike` para no distinguir mayúsculas/minúsculas.
-* Se usa **Session de SQLModel** para transacciones (`commit`, `refresh`).
-* Añade `.env` a `.gitignore` si subes el proyecto a GitHub.
-* Para desarrollo rápido, puedes usar `DEBUG=True`; en producción conviene desactivarlo.
+Todos los modelos usan **ORM** (SQLModel) para relaciones, cascadas y consultas más limpias. Se recomienda **PostgreSQL** para aprovechar funcionalidades avanzadas como **JSONB**, índices y consultas más complejas. Los endpoints de búsqueda usan `ilike` para no distinguir mayúsculas y minúsculas. Se usa `Session` de SQLModel para manejo de transacciones (`commit`, `refresh`, consultas ORM). No olvides añadir `.env` a `.gitignore` si vas a subir el proyecto a GitHub. Para desarrollo rápido puedes usar `DEBUG=True`; en producción conviene desactivarlo.
+
+## Ejemplo de uso
+
+Crear un proveedor: `POST /proveedores/` con `{"nombre": "Proveedor1", "contacto": "contacto@correo.com"}`.
+Crear una tienda: `POST /tiendas/` con `{"nombre": "Tienda Central", "direccion": "Calle Falsa 123"}`. 
+Crear un producto: `POST /productos/` con `{"nombre": "Producto A", "precio": 12.50, "id_proveedor": 1}`. 
+Añadir un producto a la tienda: `POST /tiendas/1/productos/1` con `{"stock": 100}`. 
+Buscar productos con stock mínimo: `GET /tiendas/1/productos/stock?min_stock=50`. 
+Buscar tiendas por nombre parcial: `GET /tiendas/nombre/?nombre=Central`.
