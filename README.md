@@ -41,10 +41,3 @@ Relaciones:
 
 - PostgreSQL
 - SQL (DDL y DML)
-
-## Cómo ejecutar el proyecto
-
-```sql
-CREATE DATABASE tienda;
-\c tienda
-\i tienda.sql
