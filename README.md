@@ -26,31 +26,34 @@ API REST para gestionar proveedores, tiendas, productos y stock, construida con 
 ---
 
 ## Estructura del proyecto
+
+```bash
 tienda_app/
 │
 ├── app/
-│ ├── main.py # Entry point de FastAPI con todos los endpoints
-│ ├── config.py # Configuración de entorno (.env)
-│ ├── models/ # Modelos y schemas
-│ │ ├── init.py
-│ │ ├── base.py # Clases base para herencia
-│ │ ├── tables.py # Tablas ORM: Proveedor, Tienda, Producto, TiendaProducto
-│ │ └── schemas.py # Schemas Pydantic para requests/responses
-│ ├── db/ # Conexión y setup de base de datos
-│ │ ├── init.py
-│ │ ├── session.py # Engine y Session
-│ │ └── init_db.py # Crear tablas
-│ ├── routers/ # Endpoints separados por recurso
-│ │ ├── init.py
-│ │ ├── proveedores.py
-│ │ ├── tiendas.py
-│ │ └── productos.py
-│ └── utils/
-│ └── helpers.py
+│   ├── main.py                 # Entry point de FastAPI con todos los endpoints
+│   ├── config.py               # Configuración de entorno (.env)
+│   ├── models/                 # Modelos y schemas
+│   │   ├── __init__.py
+│   │   ├── base.py             # Clases base para herencia
+│   │   ├── tables.py           # Tablas ORM: Proveedor, Tienda, Producto, TiendaProducto
+│   │   └── schemas.py          # Schemas Pydantic para requests/responses
+│   ├── db/                     # Conexión y setup de base de datos
+│   │   ├── __init__.py
+│   │   ├── session.py          # Engine y Session
+│   │   └── init_db.py          # Crear tablas
+│   ├── routers/                # Endpoints separados por recurso
+│   │   ├── __init__.py
+│   │   ├── proveedores.py
+│   │   ├── tiendas.py
+│   │   └── productos.py
+│   └── utils/
+│       └── helpers.py
 │
-├── .env # Variables de entorno (no subir a GitHub)
+├── .env                        # Variables de entorno (no subir a GitHub)
 ├── requirements.txt
 └── README.md
+```
 
 ---
 
@@ -121,3 +124,4 @@ Recuerda cambiar tu usuario y password
 - `GET /tiendas/{tienda_id}/productos` – Listar productos de una tienda
 - `PATCH /tiendas/{tienda_id}/productos/{producto_id}` – Actualizar stock
 - `DELETE /tiendas/{tienda_id}/productos/{producto_id}` – Eliminar producto de tienda
+
